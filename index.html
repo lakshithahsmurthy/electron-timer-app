@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script>window.$ = window.jQuery = require('jquery');</script>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./index.css" />
+    <title></title>
+  </head>
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+  <body>
+    <!-- <h1>Hello World!</h1> -->
+    <!-- All of the Node.js APIs are available in this renderer process. -->
+    <!-- We are using Node.js <script>document.write(process.versions.node)</script>,
+    Chromium <script>document.write(process.versions.chrome)</script>,
+    and Electron <script>document.write(process.versions.electron)</script>. -->
+    <div id="timer">
+      <img id="logo" src="./build/icon.ico" height="65px" width="65px" />
+      <button type="button" id="start" onclick="hyperScan()">QuickScan</button>
+      <div id="scanning">
+        <img id="scanning-image" src="./transparent.png" height="200px" width="400px"/>
+        <button id="report" class="hidden" onclick="readReport()">Report</button>
+        <p id="afterscan" class="hidden">For an all-round Antivirus protection, download Asystguard at <a href="https://asystguard.com/"> Asystguard.com</a></p>
+         <div id="countdownExample">
+          <div class="values"></div>
+         </div>
+      </div>
+    </div>
+
+    <script>
+        // You can also require other files to run in this process
+      require('./renderer.js')
+    </script>
+    
+    <script>
+      $("#start").click( function (e) {
+        $("#start").hide();
+        $("#logo").addClass("hidden");
+        $('#countdownExample .values').attr('style',"color:white");
+        e.preventDefault();
+        $("#scanning-image").attr('src', "./1min.gif");
+        var Timer = require('easytimer.js');
+        var timer = new Timer();
+        timer.start({countdown: true, startValues: {seconds: 10}});
+        $('#countdownExample .values').html(timer.getTimeValues().toString());
+        timer.addEventListener('secondsUpdated', function (e) {
+          $('#countdownExample .values').html(timer.getTimeValues().toString());
+        });
+        timer.addEventListener('targetAchieved', function (e) {
+          $("#scanning-image").attr('src', "./transparent.png");
+          $('#countdownExample .values').attr('style', "color:black");
+          $("#start").show();
+          $("#afterscan").removeClass("hidden");
+        });
+        $("#afterscan").addClass("hidden");
+        $("#report").removeClass('hidden');
+      });
+    </script>
+    <script>
+      const electron = require('electron');
+      const ipcRenderer = electron.ipcRenderer;
+
+      function hyperScan() {
+        ipcRenderer.send('1-min-scan');
+      };
+    </script>
+    <script>
+      function readReport() {
+        ipcRenderer.send('read-report');
+      };
+    </script>
+    <script type="text/javascript">
+      // $("#start").click( function() {
+      // var secondsCount=60;
+      // var counter=setInterval(sectimer, 1000);
+      // function sectimer() {
+      //   secondsCount--;
+      //   if(secondsCount<0) {
+      //     clearInterval(sectimer);
+      //   }
+      //   document.getElementById("time-elapsed").innerHTML =secondsCount + "seconds";
+      // }
+      // });
+    </script>
+  </body>
+</html>

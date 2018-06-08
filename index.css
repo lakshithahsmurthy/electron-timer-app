@@ -1,0 +1,44 @@
+body {
+    overflow: hidden;
+}
+
+#timer {
+    text-align: center;
+}
+
+#start {
+    position: relative;
+    top: 80px;
+    right: 35px;
+    border-radius: 10px;
+}
+
+#logo {
+    position: relative;
+    left: 35px;
+    top: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+#afterscan {
+    font-weight: bold;
+    position: relative;
+    top: -140px;
+    color: darkgrey;
+}
+
+#report {
+    position: relative;
+    bottom: 40px;
+    left: 75px;
+}
+
+.values {
+    color: white;
+    font-weight: bold;
+    position: relative;
+    top: -65px;
+}
